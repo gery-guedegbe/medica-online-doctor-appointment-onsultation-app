@@ -71,6 +71,7 @@ app.get('/health', (req, res) => {
 // ========== ROUTES ==========
 app.use('/api/auth', require('./modules/auth/auth.routes'));
 app.use('/api/users', require('./modules/users/user.routes'));
+app.use('/api/doctors', require('./modules/doctors/doctor.routes'));
 
 // ========== 404 HANDLER ==========
 app.use('*', (req, res) => {
