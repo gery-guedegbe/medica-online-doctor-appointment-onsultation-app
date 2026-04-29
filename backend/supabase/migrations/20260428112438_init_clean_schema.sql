@@ -1,0 +1,1 @@
+-- Migration init_clean_schema (vide pour synchronisation)

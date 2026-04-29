@@ -1,0 +1,1 @@
+-- Migration init_schema (vide pour synchronisation)
