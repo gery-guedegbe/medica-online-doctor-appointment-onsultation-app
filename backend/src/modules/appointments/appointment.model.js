@@ -63,16 +63,25 @@ const findById = async (id) => {
   return data;
 };
 
-const findByPatient = async (patientId, status = null) => {
-  logger.info('[appointment.model] findByPatient', { patientId, status });
+/**
+ * @param {string} patientId
+ * @param {{ status: string|null, upcoming: boolean }} filters
+ */
+const findByPatient = async (patientId, filters = {}) => {
+  logger.info('[appointment.model] findByPatient', { patientId, filters });
 
   let query = supabase
     .from('appointments')
     .select(APPOINTMENT_FIELDS)
     .eq('patient_id', patientId)
-    .order('start_time', { ascending: false });
+    .order('start_time', { ascending: filters.upcoming ?? false });
 
-  if (status) query = query.eq('status', status);
+  if (filters.status) query = query.eq('status', filters.status);
+
+  // upcoming = booked ET dans le futur
+  if (filters.upcoming) {
+    query = query.gte('start_time', new Date().toISOString());
+  }
 
   const { data, error } = await query;
 
@@ -84,16 +93,25 @@ const findByPatient = async (patientId, status = null) => {
   return data;
 };
 
-const findByDoctor = async (doctorId, status = null) => {
-  logger.info('[appointment.model] findByDoctor', { doctorId, status });
+/**
+ * @param {string} doctorId
+ * @param {{ status: string|null, upcoming: boolean }} filters
+ */
+const findByDoctor = async (doctorId, filters = {}) => {
+  logger.info('[appointment.model] findByDoctor', { doctorId, filters });
 
   let query = supabase
     .from('appointments')
     .select(APPOINTMENT_FIELDS)
     .eq('doctor_id', doctorId)
-    .order('start_time', { ascending: false });
+    .order('start_time', { ascending: filters.upcoming ?? false });
 
-  if (status) query = query.eq('status', status);
+  if (filters.status) query = query.eq('status', filters.status);
+
+  // upcoming = booked ET dans le futur
+  if (filters.upcoming) {
+    query = query.gte('start_time', new Date().toISOString());
+  }
 
   const { data, error } = await query;
 

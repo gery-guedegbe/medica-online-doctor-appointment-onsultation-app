@@ -141,7 +141,7 @@ router.get('/:id', verifyAuth, appointmentController.getById);
  *       400:
  *         description: Annulation trop tardive (CANCELLATION_TOO_LATE)
  */
-router.patch('/:id/cancel', verifyAuth, appointmentController.cancel);
+router.patch('/:id/cancel', verifyAuth, validate(cancelSchema), appointmentController.cancel);
 
 /**
  * @swagger

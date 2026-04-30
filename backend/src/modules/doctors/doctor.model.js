@@ -17,10 +17,11 @@ const supabase = require('../../shared/config/supabase');
 const AppError = require('../../shared/errors/AppError');
 const logger = require('../../shared/utils/logger');
 
-// JOIN doctors + users pour retourner un profil complet
+// JOIN doctors + users + packages actifs
 const DOCTOR_WITH_USER = `
   id, user_id, specialty, experience_years, rating, bio, created_at,
-  users(full_name, nickname, avatar_url, email)
+  users(full_name, nickname, avatar_url, email),
+  doctor_packages(id, type, price, duration_minutes, is_active)
 `;
 
 /**
@@ -80,7 +81,10 @@ const createDoctor = async (userId, data) => {
 };
 
 /**
- * Retourne tous les médecins avec filtre optionnel sur la spécialité.
+ * Retourne tous les médecins avec filtres: specialty, min_rating, search (nom).
+ * - specialty : filtre SQL ilike
+ * - min_rating : filtre SQL gte
+ * - search : filtre JS post-fetch sur full_name (MVP — dataset petit)
  */
 const findAll = async (filters = {}) => {
   logger.info('[doctor.model] findAll', { filters });
@@ -88,10 +92,14 @@ const findAll = async (filters = {}) => {
   let query = supabase
     .from('doctors')
     .select(DOCTOR_WITH_USER)
-    .order('created_at', { ascending: false });
+    .order('rating', { ascending: false, nullsFirst: false });
 
   if (filters.specialty) {
     query = query.ilike('specialty', `%${filters.specialty}%`);
+  }
+
+  if (filters.min_rating) {
+    query = query.gte('rating', parseFloat(filters.min_rating));
   }
 
   const { data, error } = await query;
@@ -104,8 +112,25 @@ const findAll = async (filters = {}) => {
     throw new AppError('Erreur récupération des médecins', 500, 'DB_ERROR');
   }
 
-  logger.info('[doctor.model] findAll — succès', { count: data.length });
-  return data;
+  // Filtre par nom (JS-side) — fiable pour MVP, à migrer en FTS pour la prod
+  let result = data;
+  if (filters.search) {
+    const term = filters.search.toLowerCase();
+    result = data.filter(
+      (d) =>
+        d.users?.full_name?.toLowerCase().includes(term) ||
+        d.specialty.toLowerCase().includes(term)
+    );
+  }
+
+  // Ne retourner que les packages actifs dans la réponse
+  result = result.map((d) => ({
+    ...d,
+    doctor_packages: d.doctor_packages?.filter((p) => p.is_active) ?? [],
+  }));
+
+  logger.info('[doctor.model] findAll — succès', { total: data.length, filtered: result.length });
+  return result;
 };
 
 /**

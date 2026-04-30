@@ -32,7 +32,7 @@ const getById = async (req, res, next) => {
 
 const cancel = async (req, res, next) => {
   try {
-    const reason = req.body?.cancellation_reason || null;
+    const reason = req.validatedData?.cancellation_reason || null;
     const appointment = await appointmentService.cancelAppointment(
       req.user.id, req.user.role, req.params.id, reason
     );

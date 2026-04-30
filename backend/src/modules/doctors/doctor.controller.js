@@ -33,6 +33,8 @@ const getAll = async (req, res, next) => {
   try {
     const filters = {
       specialty: req.query.specialty || null,
+      search: req.query.search || null,
+      min_rating: req.query.min_rating || null,
     };
     const doctors = await doctorService.getAllDoctors(filters);
     res.json({ success: true, data: { doctors, count: doctors.length } });
