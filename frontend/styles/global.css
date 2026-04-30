@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Headings - Tous en Bold par défaut selon la maquette */
+  .text-heading-1 {
+    @apply font-urbanist-bold text-h1;
+  }
+  .text-heading-2 {
+    @apply font-urbanist-bold text-h2;
+  }
+  .text-heading-3 {
+    @apply font-urbanist-bold text-h3;
+  }
+  .text-heading-4 {
+    @apply font-urbanist-bold text-h4;
+  }
+  .text-heading-5 {
+    @apply font-urbanist-bold text-h5;
+  }
+  .text-heading-6 {
+    @apply font-urbanist-bold text-h6;
+  }
+
+  /* Body XLarge variants */
+  .body-xl-bold {
+    @apply font-urbanist-bold text-body-xl;
+  }
+  .body-xl-semibold {
+    @apply font-urbanist-semibold text-body-xl;
+  }
+  .body-xl-medium {
+    @apply font-urbanist-medium text-body-xl;
+  }
+  .body-xl-regular {
+    @apply font-urbanist-regular text-body-xl;
+  }
+
+  /* Body Large variants */
+  .body-l-bold {
+    @apply font-urbanist-bold text-body-l;
+  }
+  .body-l-semibold {
+    @apply font-urbanist-semibold text-body-l;
+  }
+  .body-l-medium {
+    @apply font-urbanist-medium text-body-l;
+  }
+  .body-l-regular {
+    @apply font-urbanist-regular text-body-l;
+  }
+
+  /* Body Medium variants */
+  .body-m-bold {
+    @apply font-urbanist-bold text-body-m;
+  }
+  .body-m-semibold {
+    @apply font-urbanist-semibold text-body-m;
+  }
+  .body-m-medium {
+    @apply font-urbanist-medium text-body-m;
+  }
+  .body-m-regular {
+    @apply font-urbanist-regular text-body-m;
+  }
+
+  /* Body Small variants */
+  .body-s-bold {
+    @apply font-urbanist-bold text-body-s;
+  }
+  .body-s-semibold {
+    @apply font-urbanist-semibold text-body-s;
+  }
+  .body-s-medium {
+    @apply font-urbanist-medium text-body-s;
+  }
+  .body-s-regular {
+    @apply font-urbanist-regular text-body-s;
+  }
+
+  /* Body XSmall variants */
+  .body-xs-bold {
+    @apply font-urbanist-bold text-body-xs;
+  }
+  .body-xs-semibold {
+    @apply font-urbanist-semibold text-body-xs;
+  }
+  .body-xs-medium {
+    @apply font-urbanist-medium text-body-xs;
+  }
+  .body-xs-regular {
+    @apply font-urbanist-regular text-body-xs;
+  }
+}

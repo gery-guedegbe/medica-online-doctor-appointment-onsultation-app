@@ -73,6 +73,10 @@ app.use('/api/auth', require('./modules/auth/auth.routes'));
 app.use('/api/users', require('./modules/users/user.routes'));
 app.use('/api/doctors', require('./modules/doctors/doctor.routes'));
 app.use('/api/availability', require('./modules/availability/availability.routes'));
+app.use('/api/packages', require('./modules/packages/package.routes'));
+app.use('/api/appointments', require('./modules/appointments/appointment.routes'));
+app.use('/api/reviews', require('./modules/reviews/review.routes'));
+app.use('/api/favorites', require('./modules/favorites/favorite.routes'));
 
 // ========== 404 HANDLER ==========
 app.use('*', (req, res) => {
