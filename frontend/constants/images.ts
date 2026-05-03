@@ -6,6 +6,8 @@ import welcom_screen_image from "@assets/images/welcom_screen_image.png";
 import walkthrought_image_1 from "@assets/images/walkthrought_image_1.png";
 import walkthrought_image_2 from "@assets/images/walkthrought_image_2.png";
 import walkthrought_image_3 from "@assets/images/walkthrought_image_3.png";
+import let_you_in_icon from "@assets/icons/let_you_in_icon.png";
+import google_icon from "@assets/icons/google_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -16,4 +18,6 @@ export const IMAGES = {
   walkthrought_image_1,
   walkthrought_image_2,
   walkthrought_image_3,
+  let_you_in_icon,
+  google_icon,
 };

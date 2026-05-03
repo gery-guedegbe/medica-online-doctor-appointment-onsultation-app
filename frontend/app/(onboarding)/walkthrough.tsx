@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { WALKTHROUT_ITEMS } from "@constants/data";
 import { s, vs } from "@utils/styling";
+import AppButton from "@/components/ui/AppButton";
 
 const WalkthroughScreen = () => {
   const router = useRouter();
@@ -85,7 +86,7 @@ const WalkthroughScreen = () => {
           </View>
 
           {/* Bouton Next / Get Started */}
-          <Pressable
+          {/* <Pressable
             hitSlop={16}
             onPress={handleNext}
             style={{
@@ -105,7 +106,13 @@ const WalkthroughScreen = () => {
             >
               {isLast ? "Get Started" : "Next"}
             </Text>
-          </Pressable>
+          </Pressable> */}
+
+          <AppButton
+            onPress={handleNext}
+            className="bg-main-primary shadow-md"
+            title={isLast ? "Get Started" : "Next"}
+          />
         </View>
       </View>
     </SafeAreaView>
