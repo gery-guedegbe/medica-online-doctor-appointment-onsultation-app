@@ -2,7 +2,10 @@ import "../styles/global.css";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { useThemeStore } from "@/stores/theme.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "react-native";
+import { useTheme } from "@/hooks/useTheme";
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
@@ -25,6 +28,11 @@ export default function RootLayout() {
     "Urbanist-Thin-Italic": require("../assets/fonts/Urbanist-ThinItalic.ttf"),
   });
 
+  const initializeTheme = useThemeStore((state) => state.initializeTheme);
+  const isInitialized = useThemeStore((state) => state.isInitialized);
+
+  const { isDark } = useTheme();
+
   useEffect(() => {
     if (error) {
       console.error(error);
@@ -36,12 +44,21 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, error]);
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    initializeTheme();
+  }, [initializeTheme]);
+
+  if (!fontsLoaded || !isInitialized) {
     return null;
   }
 
   return (
     <SafeAreaProvider>
+      <StatusBar
+        barStyle={isDark ? "light-content" : "dark-content"}
+        className="bg-white dark:bg-dark-1"
+      />
+
       <Stack screenOptions={{ headerShown: false }} />
     </SafeAreaProvider>
   );
