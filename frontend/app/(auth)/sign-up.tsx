@@ -20,10 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signUpFormData, signUpSchema } from "@/schemas/auth.schema";
 import { useAuthStore } from "@stores/auth.store";
+import { useAuthNavigation } from "@hooks/useAuthNavigation";
 
 const SignUpScreen = () => {
   const router = useRouter();
   const { signUp, signInWithGoogle } = useAuthStore();
+  const { navigateAfterAuth } = useAuthNavigation();
 
   const {
     control,
@@ -40,30 +42,22 @@ const SignUpScreen = () => {
       const { needsVerification } = await signUp(data.email, data.password);
 
       if (needsVerification) {
-        // Compte créé → email de vérification envoyé
         Alert.alert(
           "Vérifiez votre email",
-          "Un lien de confirmation a été envoyé à " +
-            data.email +
-            ". Cliquez dessus pour activer votre compte.",
+          "Un lien de confirmation a été envoyé à " + data.email + ". Cliquez dessus pour activer votre compte.",
           [{ text: "OK", onPress: () => router.replace("/(auth)/let_you_in") }],
         );
       } else {
-        // Si pas de verification requise → redirige vers le splash screen
-        // qui gère la navigation en fonction de isAuthenticated et profileComplete
-        router.replace("/");
+        // Email confirm désactivé (dev) → session directe
+        const { profileComplete } = useAuthStore.getState();
+        navigateAfterAuth(profileComplete);
       }
     } catch (error: any) {
       const msg: string = error?.message ?? "";
-      if (
-        msg === "EMAIL_ALREADY_EXISTS" ||
-        msg.includes("already registered")
-      ) {
+      if (msg === "EMAIL_ALREADY_EXISTS" || msg.includes("already registered")) {
         setError("email", { message: "Cet email est déjà utilisé" });
       } else {
-        setError("email", {
-          message: "Erreur lors de l'inscription, réessayez",
-        });
+        setError("email", { message: "Erreur lors de l'inscription, réessayez" });
       }
     }
   };
@@ -71,6 +65,8 @@ const SignUpScreen = () => {
   const onGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
+      const { profileComplete } = useAuthStore.getState();
+      navigateAfterAuth(profileComplete);
     } catch (error: any) {
       if (error?.message !== "GOOGLE_OAUTH_CANCELLED") {
         setError("email", { message: "Connexion Google échouée, réessayez" });

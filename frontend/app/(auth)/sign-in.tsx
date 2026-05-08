@@ -19,10 +19,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signInFormData, signInSchema } from "@/schemas/auth.schema";
 import { useAuthStore } from "@stores/auth.store";
+import { useAuthNavigation } from "@hooks/useAuthNavigation";
 
 const SignInScreen = () => {
   const router = useRouter();
   const { signIn, signInWithGoogle } = useAuthStore();
+  const { navigateAfterAuth } = useAuthNavigation();
 
   const {
     control,
@@ -34,18 +36,17 @@ const SignInScreen = () => {
     defaultValues: { email: "", password: "", rememberMe: false },
   });
 
-  // La navigation post-connexion est gérée par index.tsx via l'état du store
   const onSubmit = async (data: signInFormData) => {
     try {
       await signIn(data.email, data.password);
+      const { profileComplete } = useAuthStore.getState();
+      navigateAfterAuth(profileComplete);
     } catch (error: any) {
       const msg: string = error?.message ?? "";
       if (msg.includes("Invalid login credentials")) {
         setError("password", { message: "Email ou mot de passe incorrect" });
       } else if (msg.includes("Email not confirmed")) {
-        setError("email", {
-          message: "Vérifiez votre email avant de continuer",
-        });
+        setError("email", { message: "Vérifiez votre email avant de continuer" });
       } else {
         setError("password", { message: "Erreur de connexion, réessayez" });
       }
@@ -55,6 +56,8 @@ const SignInScreen = () => {
   const onGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
+      const { profileComplete } = useAuthStore.getState();
+      navigateAfterAuth(profileComplete);
     } catch (error: any) {
       if (error?.message !== "GOOGLE_OAUTH_CANCELLED") {
         setError("email", { message: "Connexion Google échouée, réessayez" });

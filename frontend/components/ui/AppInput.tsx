@@ -16,6 +16,7 @@ interface AppInputProps {
   value: string | undefined;
   error?: string;
   hasIcon?: boolean;
+  desIcon?: boolean;
   icon?: ImageSourcePropType;
   keyboardType?: KeyboardTypeOptions;
   placeholder: string;
@@ -28,6 +29,7 @@ const AppInput = ({
   value,
   error,
   hasIcon = false,
+  desIcon = false,
   icon,
   keyboardType = "default",
   placeholder,
@@ -58,11 +60,13 @@ const AppInput = ({
         }}
         className=""
       >
-        <Image
-          source={icon}
-          resizeMode="contain"
-          style={{ width: s(20), height: vs(20) }}
-        />
+        {hasIcon && (
+          <Image
+            source={icon}
+            resizeMode="contain"
+            style={{ width: s(20), height: vs(20) }}
+          />
+        )}
 
         <TextInput
           value={value}
@@ -92,6 +96,14 @@ const AppInput = ({
               style={{ width: s(20), height: vs(20) }}
             />
           </Pressable>
+        )}
+
+        {desIcon && (
+          <Image
+            source={icon}
+            resizeMode="contain"
+            style={{ width: s(20), height: vs(20) }}
+          />
         )}
       </View>
 

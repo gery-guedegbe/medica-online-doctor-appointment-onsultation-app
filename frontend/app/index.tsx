@@ -40,7 +40,7 @@ export default function Index() {
 
     if (isAuthenticated) {
       if (profileComplete) {
-        router.replace("/(tabs)" as any);
+        router.replace("/(tabs)/home");
       } else {
         router.replace("/(auth)/fill_your_profile");
       }

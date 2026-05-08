@@ -7,15 +7,18 @@ import { COLORS } from "@constants/colors";
 import AppButton from "@components/ui/AppButton";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@stores/auth.store";
+import { useAuthNavigation } from "@hooks/useAuthNavigation";
 
 const LetYouInScreen = () => {
   const router = useRouter();
   const { signInWithGoogle } = useAuthStore();
+  const { navigateAfterAuth } = useAuthNavigation();
 
   const onGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      // Navigation gérée par index.tsx via l'état du store
+      const { profileComplete } = useAuthStore.getState();
+      navigateAfterAuth(profileComplete);
     } catch (error: any) {
       if (error?.message !== "GOOGLE_OAUTH_CANCELLED") {
         console.error("[LetYouIn] Google sign-in error:", error?.message);
