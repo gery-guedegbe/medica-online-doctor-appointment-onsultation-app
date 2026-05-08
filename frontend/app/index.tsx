@@ -1,21 +1,53 @@
-import { useEffect } from "react";
-import { Image } from "expo-image";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { s, vs } from "@utils/styling";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { s, vs } from "@utils/styling";
 import { IMAGES } from "@constants/images";
 import LoadingIndicator from "@components/loading/LoadingIndicator";
+import { useAuthStore } from "@stores/auth.store";
 import { useTheme } from "@/hooks/useTheme";
-import { SafeAreaView } from "react-native-safe-area-context";
 
+/**
+ * Splash screen — affiché au démarrage.
+ *
+ * Logique de navigation:
+ * - Vérifie la session Supabase en parallèle de l'affichage du logo
+ * - Attend minimum 2s pour le branding, puis:
+ *   • Session valide + profil complet  → /(tabs)/home
+ *   • Session valide + profil incomplet → /(onboarding)/fill_your_profile
+ *   • Pas de session                    → /(onboarding)/welcome
+ */
 export default function Index() {
   const router = useRouter();
-
   const { isDark } = useTheme();
+  const { checkSession, isAuthenticated, profileComplete, isLoading } =
+    useAuthStore();
 
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+
+  // Vérification session + timer minimum en parallèle
   useEffect(() => {
-    setTimeout(() => router.replace("/welcome"), 2000);
+    checkSession();
+    const timer = setTimeout(() => setMinTimeElapsed(true), 2000);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Navigation dès que les deux conditions sont remplies
+  useEffect(() => {
+    if (!minTimeElapsed || isLoading) return;
+
+    if (isAuthenticated) {
+      if (profileComplete) {
+        router.replace("/(tabs)" as any);
+      } else {
+        router.replace("/(auth)/fill_your_profile");
+      }
+    } else {
+      router.replace("/(onboarding)/welcome");
+    }
+  }, [minTimeElapsed, isLoading, isAuthenticated, profileComplete]);
 
   return (
     <SafeAreaView className="flex-1">

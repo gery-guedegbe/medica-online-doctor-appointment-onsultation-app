@@ -6,9 +6,22 @@ import { IMAGES } from "@constants/images";
 import { COLORS } from "@constants/colors";
 import AppButton from "@components/ui/AppButton";
 import { useRouter } from "expo-router";
+import { useAuthStore } from "@stores/auth.store";
 
 const LetYouInScreen = () => {
   const router = useRouter();
+  const { signInWithGoogle } = useAuthStore();
+
+  const onGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      // Navigation gérée par index.tsx via l'état du store
+    } catch (error: any) {
+      if (error?.message !== "GOOGLE_OAUTH_CANCELLED") {
+        console.error("[LetYouIn] Google sign-in error:", error?.message);
+      }
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -16,7 +29,7 @@ const LetYouInScreen = () => {
         style={{
           paddingHorizontal: s(24),
           paddingTop: vs(24),
-          paddingBottom: vs(48),
+          // paddingBottom: vs(48),
           gap: vs(32),
         }}
         className="flex-1 items-center justify-center bg-white dark:bg-dark-1"
@@ -38,6 +51,7 @@ const LetYouInScreen = () => {
 
         {/* Bouton Google */}
         <Pressable
+          onPress={onGoogleSignIn}
           style={{
             width: s(380),
             height: vs(60),
@@ -102,6 +116,7 @@ const LetYouInScreen = () => {
         <AppButton
           title="Sign in with password"
           className="bg-main-primary shadow-md"
+          onPress={() => router.push("/(auth)/sign-in")}
         />
 
         <View

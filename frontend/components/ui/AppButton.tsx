@@ -25,6 +25,7 @@ const AppButton = ({
       accessible={true}
       accessibilityRole="button"
       onPress={onPress}
+      disabled={loading}
       style={[
         style,
         {

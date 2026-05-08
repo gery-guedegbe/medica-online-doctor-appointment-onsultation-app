@@ -45,6 +45,24 @@ module.exports = {
           disabledButton: "#3062C8",
         },
 
+        // Primary
+        primary: {
+          500: "#246BFD",
+          400: "#5089FD",
+          300: "#7CA6FE",
+          200: "#A7C4FE",
+          100: "#E9F0FF",
+        },
+
+        // Secondary
+        secondary: {
+          500: "#FFD300",
+          400: "#FFDC33",
+          300: "#FFE566",
+          200: "#FFED99",
+          100: "#FFFBE6",
+        },
+
         // Section: Greyscale
         greyscale: {
           900: "#212121",

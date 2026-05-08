@@ -1,10 +1,12 @@
 import "../styles/global.css";
 import { useEffect } from "react";
+import { StatusBar } from "react-native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { useThemeStore } from "@/stores/theme.store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "react-native";
+import { supabase } from "@config/supabase";
+import { useAuthStore } from "@stores/auth.store";
+import { useThemeStore } from "@/stores/theme.store";
 import { useTheme } from "@/hooks/useTheme";
 
 export default function RootLayout() {
@@ -24,33 +26,44 @@ export default function RootLayout() {
     "Urbanist-Regular": require("../assets/fonts/Urbanist-Regular.ttf"),
     "Urbanist-Semi-Bold": require("../assets/fonts/Urbanist-SemiBold.ttf"),
     "Urbanist-Semi-Bold-Italic": require("../assets/fonts/Urbanist-SemiBoldItalic.ttf"),
-    "Urbanist-Thin": require("../assets/fonts/Urbanist-Thin.ttf"),
+    "Urbanist-Thin": require("../assets/fonts/Urbanist-ThinItalic.ttf"),
     "Urbanist-Thin-Italic": require("../assets/fonts/Urbanist-ThinItalic.ttf"),
   });
 
   const initializeTheme = useThemeStore((state) => state.initializeTheme);
   const isInitialized = useThemeStore((state) => state.isInitialized);
-
   const { isDark } = useTheme();
+  const { setUser, signOut } = useAuthStore();
 
   useEffect(() => {
-    if (error) {
-      console.error(error);
-      throw error;
-    }
-
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
+    if (error) throw error;
+    if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
   useEffect(() => {
     initializeTheme();
   }, [initializeTheme]);
 
-  if (!fontsLoaded || !isInitialized) {
-    return null;
-  }
+  /**
+   * Listener Supabase Auth — réagit aux changements de session en temps réel.
+   * Gère: connexion, déconnexion, refresh de token, verification email.
+   */
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_OUT") {
+          // Session terminée → effacer l'état local
+          await signOut();
+        }
+        // SIGNED_IN, TOKEN_REFRESHED, USER_UPDATED sont gérés
+        // par les actions du store (signIn, checkSession)
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!fontsLoaded || !isInitialized) return null;
 
   return (
     <SafeAreaProvider>
@@ -58,7 +71,6 @@ export default function RootLayout() {
         barStyle={isDark ? "light-content" : "dark-content"}
         className="bg-white dark:bg-dark-1"
       />
-
       <Stack screenOptions={{ headerShown: false }} />
     </SafeAreaProvider>
   );
