@@ -20,6 +20,23 @@ import edit_icon from "@assets/icons/edit_icon.png";
 import calendar_icon from "@assets/icons/calendar_icon.png";
 import arrow_down_icon from "@assets/icons/arrow_down_icon.png";
 import message_thin_icon from "@assets/icons/envelope_thin_icon.png";
+import forgot_password_image from "@assets/images/forgot_password_image.png";
+import create_new_password_image from "@assets/images/create_new_password_image.png";
+import congratulation_image from "@assets/images/congratulation_image.png";
+import history_icon from "@assets/icons/history_icon.png";
+import articles_icon from "@assets/icons/articles_icon.png";
+import profile_icon from "@assets/icons/profile_icon.png";
+import notification_icon from "@assets/icons/notification_icon.png";
+import heart_icon from "@assets/icons/heart_icon.png";
+import search_icon from "@assets/icons/search_icon.png";
+import filter_icon from "@assets/icons/filter_icon.png";
+import dentist_icon from "@assets/icons/dentist_icon.png";
+import ophthal_icon from "@assets/icons/ophthal_icon.png";
+import nutrition_icon from "@assets/icons/nutrition_icon.png";
+import neurolo_icon from "@assets/icons/neurolo_icon.png";
+import pediatric_icon from "@assets/icons/pediatric_icon.png";
+import radiolo_icon from "@assets/icons/radiolo_icon.png";
+import more_icon from "@assets/icons/more_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -44,4 +61,21 @@ export const IMAGES = {
   edit_icon,
   calendar_icon,
   arrow_down_icon,
+  forgot_password_image,
+  create_new_password_image,
+  congratulation_image,
+  history_icon,
+  articles_icon,
+  profile_icon,
+  notification_icon,
+  heart_icon,
+  search_icon,
+  filter_icon,
+  dentist_icon,
+  ophthal_icon,
+  nutrition_icon,
+  neurolo_icon,
+  pediatric_icon,
+  radiolo_icon,
+  more_icon,
 };

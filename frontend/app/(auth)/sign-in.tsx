@@ -168,7 +168,7 @@ const SignInScreen = () => {
                 gap: vs(12),
               }}
             >
-              <Pressable hitSlop={16}>
+              <Pressable hitSlop={16} onPress={() => router.push("/(auth)/forgot_password" as any)}>
                 <Text
                   style={{ fontSize: s(16), letterSpacing: s(0.2) }}
                   className="text-primary-500 text-center font-urbanist-semibold"

@@ -162,7 +162,7 @@ const FillYourProfile = () => {
       setUser(response.data.data.user, response.data.data.profile_complete);
 
       // 4. Navigation vers l'écran de création du PIN
-      router.replace("/(auth)/create_new_pin" as any);
+      router.replace("/(auth)/create_new_pin");
     } catch (error: any) {
       const code = error?.response?.data?.error?.code;
       if (code === "NICKNAME_TAKEN") {

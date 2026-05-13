@@ -6,6 +6,7 @@ interface AppButtonProps {
   title?: string;
   style?: ViewStyle;
   loading?: boolean;
+  disabled?: boolean;
   children?: React.ReactNode;
   className?: string;
   onPress?: () => void;
@@ -15,6 +16,7 @@ const AppButton = ({
   title,
   style,
   loading,
+  disabled,
   children,
   className,
   onPress,
@@ -25,7 +27,7 @@ const AppButton = ({
       accessible={true}
       accessibilityRole="button"
       onPress={onPress}
-      disabled={loading}
+      disabled={loading || disabled}
       style={[
         style,
         {

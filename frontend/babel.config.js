@@ -23,6 +23,7 @@ module.exports = function (api) {
             "@services": "./services",
             "@stores": "./stores",
             "@styles": "./styles",
+            "@schemas": "./schemas",
             "@types": "./types",
             "@utils": "./utils",
           },

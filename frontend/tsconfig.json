@@ -11,6 +11,7 @@
       "@constants/*": ["./constants/*"],
       "@components/*": ["./components/*"],
       "@services/*": ["./services/*"],
+      "@schemas/*": ["./schemas/*"],
       "@hooks/*": ["./hooks/*"],
       "@utils/*": ["./utils/*"],
       "@stores/*": ["./stores/*"],
