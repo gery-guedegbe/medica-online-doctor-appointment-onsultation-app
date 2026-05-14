@@ -37,6 +37,7 @@ import neurolo_icon from "@assets/icons/neurolo_icon.png";
 import pediatric_icon from "@assets/icons/pediatric_icon.png";
 import radiolo_icon from "@assets/icons/radiolo_icon.png";
 import more_icon from "@assets/icons/more_icon.png";
+import home_icon from "@assets/icons/home_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -78,4 +79,5 @@ export const IMAGES = {
   pediatric_icon,
   radiolo_icon,
   more_icon,
+  home_icon,
 };
