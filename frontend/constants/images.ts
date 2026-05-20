@@ -42,6 +42,16 @@ import generalist_icon from "@assets/icons/generalist_icon.png";
 import star_icon from "@assets/icons/star_icon.png";
 import doctor_image from "@assets/images/doctor_image.png";
 import bold_heart_icon from "@assets/icons/bold_heart_icon.png";
+import arrow_left_icon from "@assets/icons/arrow_left_icon.png";
+import black_more_icon from "@assets/icons/black_more_icon.png";
+import cancel_icon from "@assets/icons/cancel_icon.png";
+import schedule_icon from "@assets/icons/schedule_icon.png";
+import appointment_icon from "@assets/icons/appointment_icon.png";
+import services_icon from "@assets/icons/services_icon.png";
+import credit_card_icon from "@assets/icons/credit_card_icon.png";
+import search_black_icon from "@assets/icons/search_black_icon.png";
+import not_found_image from "@assets/images/not_found_image.png";
+import swap_icon from "@assets/icons/swap_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -88,4 +98,14 @@ export const IMAGES = {
   star_icon,
   doctor_image,
   bold_heart_icon,
+  arrow_left_icon,
+  black_more_icon,
+  cancel_icon,
+  schedule_icon,
+  appointment_icon,
+  services_icon,
+  credit_card_icon,
+  search_black_icon,
+  not_found_image,
+  swap_icon,
 };

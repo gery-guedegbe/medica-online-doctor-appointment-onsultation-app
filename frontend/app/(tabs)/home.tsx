@@ -10,7 +10,11 @@ import MedicalChecksBanner from "@/components/home/MedicalChecksBanner";
 const HomeScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }} className="bg-white dark:bg-dark-1">
+      <ScrollView
+        style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+        className="bg-white dark:bg-dark-1"
+      >
         <View
           style={{
             paddingHorizontal: s(24),

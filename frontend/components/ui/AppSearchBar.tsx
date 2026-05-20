@@ -8,16 +8,18 @@ interface AppSearchBarProps {
   value?: string;
   isFocused?: boolean;
   onPress?: () => void;
-  isPressable: boolean;
+  isPressable?: boolean;
   onChangeText?: (text: string) => void;
+  onFilterPress?: () => void;
 }
 
 const AppSearchBar = ({
   value,
   isFocused,
   onPress,
-  isPressable,
+  isPressable = false,
   onChangeText,
+  onFilterPress,
 }: AppSearchBarProps) => {
   const router = useRouter();
 
@@ -30,6 +32,7 @@ const AppSearchBar = ({
   return (
     <View
       style={{
+        flex: 1,
         height: vs(56),
         borderRadius: s(16),
         paddingHorizontal: s(20),
@@ -52,19 +55,28 @@ const AppSearchBar = ({
         value={value}
         placeholder="Search"
         onPress={handlePress}
+        returnKeyType="search"
+        editable={!isPressable}
+        autoFocus={!isPressable}
         onChangeText={onChangeText}
         placeholderTextColor="#BDBDBD"
         className="font-urbanist-regular text-greyscale-400"
         style={{ flex: 1, fontSize: s(14), letterSpacing: s(0.2) }}
       />
 
-      <Pressable hitSlop={18} style={{ width: s(20), height: s(20) }}>
-        <Image
-          source={IMAGES.filter_icon}
-          resizeMode="contain"
-          style={{ flex: 1 }}
-        />
-      </Pressable>
+      {onFilterPress && (
+        <Pressable
+          hitSlop={18}
+          onPress={onFilterPress}
+          style={{ width: s(20), height: s(20) }}
+        >
+          <Image
+            source={IMAGES.filter_icon}
+            resizeMode="contain"
+            style={{ flex: 1 }}
+          />
+        </Pressable>
+      )}
     </View>
   );
 };
