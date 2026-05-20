@@ -92,4 +92,11 @@
   .body-xs-regular {
     @apply font-urbanist-regular text-body-xs;
   }
+
+  .linear-bg {
+    background: var(
+      linear-gradient(286deg, #246bfd 0%, #5089ff 100%),
+      linear-gradient(286deg, #246bfd 0%, #5089ff 100%)
+    );
+  }
 }

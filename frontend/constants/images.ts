@@ -38,6 +38,10 @@ import pediatric_icon from "@assets/icons/pediatric_icon.png";
 import radiolo_icon from "@assets/icons/radiolo_icon.png";
 import more_icon from "@assets/icons/more_icon.png";
 import home_icon from "@assets/icons/home_icon.png";
+import generalist_icon from "@assets/icons/generalist_icon.png";
+import star_icon from "@assets/icons/star_icon.png";
+import doctor_image from "@assets/images/doctor_image.png";
+import bold_heart_icon from "@assets/icons/bold_heart_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -80,4 +84,8 @@ export const IMAGES = {
   radiolo_icon,
   more_icon,
   home_icon,
+  generalist_icon,
+  star_icon,
+  doctor_image,
+  bold_heart_icon,
 };
