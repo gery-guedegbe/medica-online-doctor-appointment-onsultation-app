@@ -4,19 +4,19 @@ import { s, vs } from "@/utils/styling";
 import { IMAGES } from "@/constants/images";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface DoctorCardProps {
+interface DoctorDetailsCardProps {
   doctor: Doctor;
   isFavorite?: boolean;
   onPress?: () => void;
   onFavoritePress?: () => void;
 }
 
-const DoctorCard = ({
+const DoctorDetailsCard = ({
   doctor,
   isFavorite = false,
   onPress,
   onFavoritePress,
-}: DoctorCardProps) => {
+}: DoctorDetailsCardProps) => {
   return (
     <View
       style={{
@@ -45,7 +45,6 @@ const DoctorCard = ({
 
       {/* Infos */}
       <View style={{ flex: 1, gap: vs(14) }}>
-
         {/* Ligne nom + cœur — deux Pressable frères, jamais imbriqués */}
         <View style={{ flexDirection: "row", alignItems: "center", gap: s(8) }}>
           <Text
@@ -59,7 +58,12 @@ const DoctorCard = ({
           <Pressable
             onPress={onFavoritePress}
             hitSlop={16}
-            style={{ width: s(24), height: s(24), alignItems: "center", justifyContent: "center" }}
+            style={{
+              width: s(24),
+              height: s(24),
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <Image
               source={isFavorite ? IMAGES.bold_heart_icon : IMAGES.heart_icon}
@@ -77,26 +81,19 @@ const DoctorCard = ({
           style={{ fontSize: s(12), letterSpacing: s(0.2) }}
           className="font-urbanist-medium text-greyscale-800"
         >
-          {doctor.specialty}{"  |  "}{doctor.experience_years} yrs exp.
+          {doctor.specialty}
         </Text>
 
-        <View style={{ flexDirection: "row", alignItems: "center", gap: s(8) }}>
-          <Image
-            source={IMAGES.star_icon}
-            style={{ width: s(16), height: s(16) }}
-            resizeMode="contain"
-          />
-          <Text
-            style={{ fontSize: s(13), letterSpacing: s(0.2) }}
-            className="font-urbanist-medium text-greyscale-800 dark:text-white"
-          >
-            {doctor.rating.toFixed(1)}
-          </Text>
-        </View>
-
+        <Text
+          numberOfLines={2}
+          style={{ fontSize: s(12), letterSpacing: s(0.2) }}
+          className="font-urbanist-medium text-greyscale-800"
+        >
+          {`${doctor.hospital_name}, ${doctor.hospital_address}, ${doctor.hospital_country}`}
+        </Text>
       </View>
     </View>
   );
 };
 
-export default DoctorCard;
+export default DoctorDetailsCard;

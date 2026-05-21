@@ -239,4 +239,24 @@ router.delete(
  */
 router.get('/slots', verifyAuth, availabilityController.getSlots);
 
+/**
+ * @swagger
+ * /api/availability/doctor/{doctorId}:
+ *   get:
+ *     summary: Voir le planning hebdomadaire d'un médecin (tous les utilisateurs authentifiés)
+ *     tags: [Availability]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: doctorId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Règles de disponibilité du médecin
+ */
+router.get('/doctor/:doctorId', verifyAuth, availabilityController.getDoctorRules);
+
 module.exports = router;

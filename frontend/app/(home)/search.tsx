@@ -1,95 +1,108 @@
-import LoadingIndicator from "@/components/loading/LoadingIndicator";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { s, vs } from "@/utils/styling";
+import { useRouter } from "expo-router";
+import { IMAGES } from "@/constants/images";
 import AppSearchBar from "@/components/ui/AppSearchBar";
 import DoctorCard from "@/components/ui/DoctorCard";
 import FilterBottomSheet, {
   FilterState,
 } from "@/components/ui/FilterBottomSheet";
-import { DOCTORS } from "@/constants/data";
-import { IMAGES } from "@/constants/images";
-import { Doctor } from "@/types";
-import { s, vs } from "@/utils/styling";
-import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDoctorStore } from "@/store/useDoctorStore";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
 
-const FILTERS = ["All", "General", "Dentist", "Nutritionist", "Allergists"];
+const FILTERS = [
+  { label: "All", specialty: null },
+  { label: "General", specialty: "General Practitioner" },
+  { label: "Dentist", specialty: "Dentist" },
+  { label: "Nutritionist", specialty: "Nutritionist" },
+  { label: "Allergist", specialty: "Allergist" },
+];
 
 const SearchScreen = () => {
   const router = useRouter();
 
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const fetchDoctors = async (query: string): Promise<Doctor[]> => {
-    await new Promise((r) => setTimeout(r, 800)); // simule latence réseau
-    if (!query.trim()) return DOCTORS;
-    return DOCTORS.filter((d) =>
-      d.name.toLowerCase().includes(query.toLowerCase()),
-    );
-  };
+  const { doctors, isLoading, fetchDoctors } = useDoctorStore();
+  const { favoriteIds, toggle, fetchFavorites } = useFavoriteStore();
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Doctor[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
   const [filterVisible, setFilterVisible] = useState(false);
-  const [activeAdvancedFilter, setActiveAdvancedFilter] = useState<FilterState>(
-    {
-      speciality: "All",
-      rating: null,
-    },
-  );
-  const [favorites, setFavorites] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(DOCTORS.map((d) => [d.id, d.isFavorite ?? false])),
-  );
+  const [advancedFilter, setAdvancedFilter] = useState<FilterState>({
+    speciality: "All",
+    rating: null,
+  });
 
-  // Recherche avec debounce
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(async () => {
-      const data = await fetchDoctors(query);
-      setResults(data);
-      setIsLoading(false);
-    }, 400);
+    if (doctors.length === 0) fetchDoctors();
+    fetchFavorites();
+  }, [fetchDoctors, fetchFavorites]);
+
+  // Debounce : attend 400 ms après la dernière frappe avant de filtrer
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 400);
     return () => clearTimeout(timer);
   }, [query]);
 
-  const toggleFavorite = useCallback((id: string) => {
-    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
-  }, []);
+  const activeSpecialty = FILTERS.find(
+    (f) => f.label === activeFilter,
+  )?.specialty;
 
-  // Application des filtres côté client
-  // → Quand le backend est branché, passe ces filtres en params de requête
+  // Tous les filtres appliqués côté client sur le store déjà chargé
   const filteredResults = useMemo(() => {
-    return results
-      .filter((d) => activeFilter === "All" || d.category === activeFilter)
-      .filter((d) =>
-        activeAdvancedFilter.speciality === "All"
-          ? true
-          : d.category === activeAdvancedFilter.speciality,
-      )
-      .filter((d) =>
-        activeAdvancedFilter.rating
-          ? d.rating >= activeAdvancedFilter.rating
-          : true,
-      )
-      .map((d) => ({ ...d, isFavorite: favorites[d.id] ?? false }));
-  }, [results, activeFilter, activeAdvancedFilter, favorites]);
+    return doctors
+      .filter((d) => {
+        // Filtre texte sur nom et spécialité
+        if (!debouncedQuery.trim()) return true;
+        const q = debouncedQuery.toLowerCase();
+        return (
+          d.full_name.toLowerCase().includes(q) ||
+          d.specialty.toLowerCase().includes(q)
+        );
+      })
+      .filter((d) => {
+        // Filtre catégorie (onglets rapides)
+        if (activeSpecialty == null) return true;
+        return d.specialty === activeSpecialty;
+      })
+      .filter((d) => {
+        // Filtre spécialité avancé (FilterBottomSheet)
+        if (advancedFilter.speciality === "All") return true;
+        return d.specialty
+          .toLowerCase()
+          .includes(advancedFilter.speciality.toLowerCase());
+      })
+      .filter((d) => {
+        // Filtre note minimale
+        if (!advancedFilter.rating) return true;
+        return d.rating >= advancedFilter.rating;
+      });
+  }, [doctors, debouncedQuery, activeSpecialty, advancedFilter]);
+
+  const handleApplyFilter = useCallback((filter: FilterState) => {
+    setAdvancedFilter(filter);
+    setFilterVisible(false);
+  }, []);
 
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
         <View
           style={{
+            flex: 1,
             paddingHorizontal: s(24),
             paddingTop: vs(24),
-            paddingBottom: vs(48),
-            gap: vs(32),
+            paddingBottom: vs(16),
+            gap: vs(24),
           }}
-          className="flex-1 bg-white dark:bg-dark-1"
+          className="bg-white dark:bg-dark-1"
         >
+          {/* En-tête : retour + barre de recherche */}
           <View
-            style={{ gap: vs(16) }}
-            className="flex flex-row items-center justify-between"
+            style={{ flexDirection: "row", alignItems: "center", gap: s(12) }}
           >
             <Pressable
               hitSlop={18}
@@ -111,22 +124,20 @@ const SearchScreen = () => {
             />
           </View>
 
+          {/* Filtres rapides par spécialité */}
           <View>
-            {/* Liste des docteurs */}
-
             <FlatList
               data={FILTERS}
               horizontal
-              keyExtractor={(item) => item}
+              keyExtractor={(item) => item.label}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: s(12) }}
               style={{ flexGrow: 0 }}
               renderItem={({ item }) => {
-                const isActive = item === activeFilter;
-
+                const isActive = item.label === activeFilter;
                 return (
                   <Pressable
-                    onPress={() => setActiveFilter(item)}
+                    onPress={() => setActiveFilter(item.label)}
                     style={{
                       paddingHorizontal: s(20),
                       paddingVertical: vs(8),
@@ -144,7 +155,7 @@ const SearchScreen = () => {
                           : "font-urbanist-semibold text-greyscale-700 dark:text-greyscale-300"
                       }
                     >
-                      {item}
+                      {item.label}
                     </Text>
                   </Pressable>
                 );
@@ -152,7 +163,7 @@ const SearchScreen = () => {
             />
           </View>
 
-          {/* Contenu */}
+          {/* Résultats */}
           {isLoading ? (
             <View
               style={{
@@ -168,7 +179,8 @@ const SearchScreen = () => {
               data={filteredResults}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingVertical: vs(8), gap: vs(16) }}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingVertical: vs(8), gap: vs(12) }}
               ListHeaderComponent={
                 <View
                   style={{
@@ -179,12 +191,11 @@ const SearchScreen = () => {
                   }}
                 >
                   <Text
-                    style={{ fontSize: s(18) }}
+                    style={{ fontSize: s(16) }}
                     className="font-urbanist-bold text-greyscale-900 dark:text-white"
                   >
-                    {`${filteredResults.length} found`}
+                    {filteredResults.length} found
                   </Text>
-
                   <View
                     style={{
                       flexDirection: "row",
@@ -198,7 +209,6 @@ const SearchScreen = () => {
                     >
                       Default
                     </Text>
-
                     <Image
                       source={IMAGES.swap_icon}
                       resizeMode="contain"
@@ -210,8 +220,14 @@ const SearchScreen = () => {
               renderItem={({ item }) => (
                 <DoctorCard
                   doctor={item}
-                  // onPress={() => router.push(`/(home)/doctor/${item.id}`)}
-                  onFavoritePress={() => toggleFavorite(item.id)}
+                  isFavorite={favoriteIds.has(item.id)}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(home)/doctor/[id]",
+                      params: { id: item.id },
+                    })
+                  }
+                  onFavoritePress={() => toggle(item)}
                 />
               )}
               ListEmptyComponent={
@@ -219,7 +235,7 @@ const SearchScreen = () => {
                   style={{
                     flex: 1,
                     alignItems: "center",
-                    gap: vs(32),
+                    gap: vs(24),
                     paddingTop: vs(60),
                   }}
                 >
@@ -228,7 +244,6 @@ const SearchScreen = () => {
                     resizeMode="contain"
                     style={{ width: s(260), height: vs(200) }}
                   />
-
                   <View style={{ gap: vs(10) }}>
                     <Text
                       style={{ fontSize: s(22) }}
@@ -236,7 +251,6 @@ const SearchScreen = () => {
                     >
                       Not Found
                     </Text>
-
                     <Text
                       style={{
                         fontSize: s(15),
@@ -245,8 +259,8 @@ const SearchScreen = () => {
                       }}
                       className="text-center font-urbanist-regular text-greyscale-500"
                     >
-                      Sorry, the keyword you entered cannot be found, please
-                      check again or search with another keyword.
+                      No doctor matches your search. Try a different name or
+                      specialty.
                     </Text>
                   </View>
                 </View>
@@ -256,11 +270,11 @@ const SearchScreen = () => {
         </View>
       </SafeAreaView>
 
-      {/* Filter Bottom Sheet */}
+      {/* Filtre avancé (bottom sheet) */}
       <FilterBottomSheet
         visible={filterVisible}
-        initialFilter={activeAdvancedFilter}
-        onApply={setActiveAdvancedFilter}
+        initialFilter={advancedFilter}
+        onApply={handleApplyFilter}
         onClose={() => setFilterVisible(false)}
       />
     </>

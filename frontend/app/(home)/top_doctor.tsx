@@ -1,9 +1,3 @@
-import React, { useState } from "react";
-import { s, vs } from "@/utils/styling";
-import { useRouter } from "expo-router";
-import { DOCTORS } from "@/constants/data";
-import { IMAGES } from "@/constants/images";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   FlatList,
   Image,
@@ -12,26 +6,45 @@ import {
   Text,
   View,
 } from "react-native";
+import { s, vs } from "@/utils/styling";
+import { useRouter } from "expo-router";
+import { IMAGES } from "@/constants/images";
+import React, { useEffect, useState } from "react";
 import DoctorCard from "@/components/ui/DoctorCard";
+import { useDoctorStore } from "@/store/useDoctorStore";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const FILTERS = ["All", "General", "Dentist", "Nutritionist", "Allergists"];
+const FILTERS = [
+  { label: "All", specialty: null },
+  { label: "General", specialty: "General Practitioner" },
+  { label: "Dentist", specialty: "Dentist" },
+  { label: "Nutritionist", specialty: "Nutritionist" },
+  { label: "Allergist", specialty: "Allergist" },
+];
 
 const TopDoctorScreen = () => {
   const router = useRouter();
 
+  const { doctors, fetchDoctors } = useDoctorStore();
+
+  const { favoriteIds, toggle, fetchFavorites } = useFavoriteStore();
+
   const [activeFilter, setActiveFilter] = useState("All");
-  const [doctors, setDoctors] = useState(DOCTORS);
+
+  const activeSpecialty = FILTERS.find(
+    (f) => f.label === activeFilter,
+  )?.specialty;
 
   const filteredDoctors =
-    activeFilter === "All"
+    activeSpecialty == null
       ? doctors
-      : doctors.filter((d) => d.category === activeFilter);
+      : doctors.filter((d) => d.specialty === activeSpecialty);
 
-  const toggleFavorite = (id: string) => {
-    setDoctors((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, isFavorite: !d.isFavorite } : d)),
-    );
-  };
+  useEffect(() => {
+    fetchDoctors();
+    fetchFavorites();
+  }, [fetchDoctors, fetchFavorites]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -40,6 +53,7 @@ const TopDoctorScreen = () => {
           paddingTop: vs(24),
           paddingBottom: vs(48),
           paddingHorizontal: s(24),
+
           gap: vs(32),
         }}
         className="flex-1 bg-white dark:bg-dark-1"
@@ -109,12 +123,12 @@ const TopDoctorScreen = () => {
             contentContainerStyle={{ gap: s(12) }}
           >
             {FILTERS.map((filter) => {
-              const isActive = filter === activeFilter;
+              const isActive = filter.label === activeFilter;
 
               return (
                 <Pressable
-                  key={filter}
-                  onPress={() => setActiveFilter(filter)}
+                  key={filter.label}
+                  onPress={() => setActiveFilter(filter.label)}
                   style={{
                     paddingHorizontal: s(20),
                     paddingVertical: vs(8),
@@ -132,7 +146,7 @@ const TopDoctorScreen = () => {
                         : "font-urbanist-semibold text-primary-500 dark:text-greyscale-300"
                     }
                   >
-                    {filter}
+                    {filter.label}
                   </Text>
                 </Pressable>
               );
@@ -143,17 +157,19 @@ const TopDoctorScreen = () => {
           <FlatList
             data={filteredDoctors}
             keyExtractor={(item) => item.id}
-            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               paddingVertical: vs(8),
               paddingHorizontal: s(4),
+              paddingBottom: vs(120),
               gap: vs(12),
             }}
             renderItem={({ item }) => (
               <DoctorCard
                 doctor={item}
-                // onPress={() => router.push(`/(home)/doctor/${item.id}`)}
-                onFavoritePress={() => toggleFavorite(item.id)}
+                isFavorite={favoriteIds.has(item.id)}
+                onPress={() => router.push({ pathname: "/(home)/doctor/[id]", params: { id: item.id } })}
+                onFavoritePress={() => toggle(item)}
               />
             )}
             ListEmptyComponent={

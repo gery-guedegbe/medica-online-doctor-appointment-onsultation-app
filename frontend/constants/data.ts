@@ -20,41 +20,103 @@ export const WALKTHROUT_ITEMS = [
   },
 ];
 
-export const DOCTORS: Doctor[] = [
+// export const DOCTORS: Doctor[] = [
+//   {
+//     id: "1",
+//     name: "Dr. Travis Westaby",
+//     specialty: "Cardiologists",
+//     hospital: "Alka Hospital",
+//     rating: 4.3,
+//     reviews: 5376,
+//     image: IMAGES.doctor_image,
+//     isFavorite: true,
+//     category: "General",
+//   },
+//   {
+//     id: "2",
+//     name: "Dr. Nathaniel Valle",
+//     specialty: "Cardiologists",
+//     hospital: "B&B Hospital",
+//     rating: 4.6,
+//     reviews: 3837,
+//     image: IMAGES.doctor_image,
+//     isFavorite: true,
+//     category: "Dentist",
+//   },
+//   {
+//     id: "3",
+//     name: "Dr. Beckett Calger",
+//     specialty: "Cardiologists",
+//     hospital: "Venus Hospital",
+//     rating: 4.4,
+//     reviews: 4942,
+//     image: IMAGES.doctor_image,
+//     isFavorite: false,
+//     category: "Nutritionist",
+//   },
+// ];
+
+// ─── Reviews ─────────────────────────────────────────────────────────────────
+
+export interface Review {
+  id: string;
+  patient_name: string;
+  avatar_url: string;
+  stars: number;      // 1 à 5
+  comment: string;
+  likes: number;
+  date: string;       // affichage libre ex: "6 days ago"
+}
+
+export const REVIEWS: Review[] = [
   {
     id: "1",
-    name: "Dr. Travis Westaby",
-    specialty: "Cardiologists",
-    hospital: "Alka Hospital",
-    rating: 4.3,
-    reviews: 5376,
-    image: IMAGES.doctor_image,
-    isFavorite: true,
-    category: "General",
+    patient_name: "Charolette Hanlin",
+    avatar_url: "https://randomuser.me/api/portraits/women/44.jpg",
+    stars: 5,
+    comment: "Dr. Jenny is very professional in her work and responsive. I have consulted and my problem is solved. 😊😊",
+    likes: 938,
+    date: "6 days ago",
   },
   {
     id: "2",
-    name: "Dr. Nathaniel Valle",
-    specialty: "Cardiologists",
-    hospital: "B&B Hospital",
-    rating: 4.6,
-    reviews: 3837,
-    image: IMAGES.doctor_image,
-    isFavorite: true,
-    category: "Dentist",
+    patient_name: "Darron Kulikowski",
+    avatar_url: "https://randomuser.me/api/portraits/men/32.jpg",
+    stars: 4,
+    comment: "The doctor is very beautiful and the service is excellent! I like it and want to consult again 😍😍",
+    likes: 863,
+    date: "6 days ago",
   },
   {
     id: "3",
-    name: "Dr. Beckett Calger",
-    specialty: "Cardiologists",
-    hospital: "Venus Hospital",
-    rating: 4.4,
-    reviews: 4942,
-    image: IMAGES.doctor_image,
-    isFavorite: false,
-    category: "Nutritionist",
+    patient_name: "Lauralee Quintero",
+    avatar_url: "https://randomuser.me/api/portraits/women/68.jpg",
+    stars: 4,
+    comment: "Doctors who are very skilled and fast in service. I highly recommend Dr. Jenny for all who want to consult 👍👍",
+    likes: 629,
+    date: "1 week ago",
+  },
+  {
+    id: "4",
+    patient_name: "Aileen Fullbright",
+    avatar_url: "https://randomuser.me/api/portraits/women/21.jpg",
+    stars: 5,
+    comment: "Doctors who are very skilled and fast in service. My illness is cured, thank you very much 😊",
+    likes: 553,
+    date: "1 week ago",
+  },
+  {
+    id: "5",
+    patient_name: "Rodolfo Goode",
+    avatar_url: "https://randomuser.me/api/portraits/men/57.jpg",
+    stars: 4,
+    comment: "Dr. Jenny is very professional in her work and responsive. I have consulted and my problem is solved. 🔥🔥",
+    likes: 471,
+    date: "2 weeks ago",
   },
 ];
+
+// ─── Notifications ────────────────────────────────────────────────────────────
 
 // constants/notifications.ts
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import { supabase } from "@config/supabase";
 
 export const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.73:5000/api",
+  baseURL: process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.74:5000/api",
   timeout: 10000,
 });
 

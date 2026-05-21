@@ -19,7 +19,9 @@ const logger = require('../../shared/utils/logger');
 
 // JOIN doctors + users + packages actifs
 const DOCTOR_WITH_USER = `
-  id, user_id, specialty, experience_years, rating, bio, created_at,
+  id, user_id, specialty, experience_years, rating, bio,
+  hospital_name, hospital_address, hospital_country, patients_count,
+  created_at,
   users(full_name, nickname, avatar_url, email),
   doctor_packages(id, type, price, duration_minutes, is_active)
 `;

@@ -5,7 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "seed:doctors": "node seed/seed_doctors.js",
+    "seed:images": "node seed/download_doctor_images.js",
+    "seed:hospital": "node seed/update_hospital_fields.js"
   },
   "keywords": [
     "medical",

@@ -52,6 +52,8 @@ import credit_card_icon from "@assets/icons/credit_card_icon.png";
 import search_black_icon from "@assets/icons/search_black_icon.png";
 import not_found_image from "@assets/images/not_found_image.png";
 import swap_icon from "@assets/icons/swap_icon.png";
+import users_icon from "@assets/icons/users_icon.png";
+import activity_icon from "@assets/icons/activity_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -108,4 +110,6 @@ export const IMAGES = {
   search_black_icon,
   not_found_image,
   swap_icon,
+  users_icon,
+  activity_icon,
 };

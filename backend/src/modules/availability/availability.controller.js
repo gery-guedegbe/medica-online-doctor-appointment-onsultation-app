@@ -87,4 +87,17 @@ const getSlots = async (req, res, next) => {
   }
 };
 
-module.exports = { addRule, getMyRules, updateRule, deleteRule, getSlots };
+/**
+ * GET /api/availability/doctor/:doctorId
+ * Accessible à tous les utilisateurs authentifiés (patients inclus)
+ */
+const getDoctorRules = async (req, res, next) => {
+  try {
+    const rules = await availabilityService.getRulesForDoctor(req.params.doctorId);
+    res.json({ success: true, data: { rules, count: rules.length } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { addRule, getMyRules, updateRule, deleteRule, getSlots, getDoctorRules };

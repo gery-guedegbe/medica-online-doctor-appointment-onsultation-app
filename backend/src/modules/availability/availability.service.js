@@ -229,4 +229,12 @@ const getAvailableSlots = async (doctorId, date) => {
   };
 };
 
-module.exports = { addRule, getMyRules, updateRule, deleteRule, getAvailableSlots };
+/**
+ * Retourne les règles de disponibilité d'un médecin (accessible aux patients).
+ */
+const getRulesForDoctor = async (doctorId) => {
+  logger.info('[availability.service] getRulesForDoctor', { doctorId });
+  return availabilityModel.findRulesByDoctorId(doctorId);
+};
+
+module.exports = { addRule, getMyRules, updateRule, deleteRule, getAvailableSlots, getRulesForDoctor };
