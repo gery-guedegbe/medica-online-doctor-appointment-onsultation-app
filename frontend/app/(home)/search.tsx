@@ -244,6 +244,7 @@ const SearchScreen = () => {
                     resizeMode="contain"
                     style={{ width: s(260), height: vs(200) }}
                   />
+
                   <View style={{ gap: vs(10) }}>
                     <Text
                       style={{ fontSize: s(22) }}
@@ -251,6 +252,7 @@ const SearchScreen = () => {
                     >
                       Not Found
                     </Text>
+
                     <Text
                       style={{
                         fontSize: s(15),

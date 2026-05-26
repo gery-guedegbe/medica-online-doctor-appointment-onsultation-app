@@ -54,6 +54,12 @@ import not_found_image from "@assets/images/not_found_image.png";
 import swap_icon from "@assets/icons/swap_icon.png";
 import users_icon from "@assets/icons/users_icon.png";
 import activity_icon from "@assets/icons/activity_icon.png";
+import arrow_right_bold from "@assets/icons/arrow_right_bold.png";
+import arrow_left_bold from "@assets/icons/arrow_left_bold.png";
+import time_circle_icon from "@assets/icons/time_circle_icon.png";
+import call_icon from "@assets/icons/call_icon.png";
+import video_call_icon from "@assets/icons/video_call.png";
+import chat_icon from "@assets/icons/chat_icon.png";
 
 export const IMAGES = {
   app_logo,
@@ -112,4 +118,10 @@ export const IMAGES = {
   swap_icon,
   users_icon,
   activity_icon,
+  arrow_right_bold,
+  arrow_left_bold,
+  time_circle_icon,
+  call_icon,
+  video_call_icon,
+  chat_icon,
 };

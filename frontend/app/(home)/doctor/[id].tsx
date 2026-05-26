@@ -278,7 +278,12 @@ const DoctorDetailsScreen = () => {
           <AppButton
             title="Book Appointment"
             className="bg-main-primary shadow-md"
-            onPress={() => router.push(`/(home)/doctor/book_appointment`)}
+            onPress={() =>
+              router.push({
+                pathname: "/(home)/appointment/book_appointment",
+                params: { doctorId: doctor.id },
+              })
+            }
           />
         </View>
       </View>

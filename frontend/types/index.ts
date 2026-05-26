@@ -19,7 +19,7 @@ export interface AvailabilityRule {
   doctor_id: string;
   day_of_week: number;
   start_time: string; // "09:00:00"
-  end_time: string;   // "17:00:00"
+  end_time: string; // "17:00:00"
 }
 
 // Un package de consultation proposé par un médecin
@@ -28,15 +28,15 @@ export interface DoctorPackage {
   type: "messaging" | "video" | "voice";
   price: number;
   duration_minutes: number;
-  is_active: boolean;
+  is_active?: boolean;
 }
 
 // Correspond exactement à la réponse de l'API GET /doctors
 export interface Doctor {
   id: string;
   user_id: string;
-  full_name: string;        // vient de users.full_name
-  avatar_url: string;       // vient de users.avatar_url (URL Supabase Storage)
+  full_name: string; // vient de users.full_name
+  avatar_url: string; // vient de users.avatar_url (URL Supabase Storage)
   specialty: string;
   experience_years: number;
   rating: number;
@@ -46,5 +46,5 @@ export interface Doctor {
   hospital_country: string;
   patients_count: number;
   packages: DoctorPackage[];
-  isFavorite?: boolean;     // état UI uniquement, non présent dans l'API
+  isFavorite?: boolean; // état UI uniquement, non présent dans l'API
 }

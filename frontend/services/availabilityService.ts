@@ -34,3 +34,17 @@ export const getDoctorAvailability = async (doctorId: string): Promise<Availabil
   const response = await api.get(`/availability/doctor/${doctorId}`);
   return response.data.data.rules ?? [];
 };
+
+// GET /api/availability/slots?doctor_id=X&date=YYYY-MM-DD
+// Retourne les créneaux disponibles pour un médecin à une date donnée
+export const getDoctorSlots = async (
+  doctorId: string,
+  date: Date,
+): Promise<{ start: string; end: string; available: boolean }[]> => {
+  // Format YYYY-MM-DD attendu par l'API
+  const dateStr = date.toISOString().split("T")[0];
+  const response = await api.get("/availability/slots", {
+    params: { doctor_id: doctorId, date: dateStr },
+  });
+  return response.data.data.slots ?? [];
+};
