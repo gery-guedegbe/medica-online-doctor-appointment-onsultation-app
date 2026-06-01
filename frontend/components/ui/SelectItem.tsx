@@ -6,9 +6,9 @@ interface SelectItemProps {
   id: string;
   label: string;
   icon: ImageURISource;
-  price: number;
-  desc: string;
-  duration: number;
+  price?: number;
+  desc?: string;
+  duration?: number;
   isSelected: boolean;
   onPress: () => void;
 }
@@ -91,7 +91,7 @@ const SelectItem = ({
             style={{ fontSize: s(18), letterSpacing: s(0.2) }}
             className="font-urbanist-bold text-primary-500"
           >
-            ${`${price.toFixed(2)}`}
+            ${`${price?.toFixed(2)}`}
           </Text>
 
           <Text

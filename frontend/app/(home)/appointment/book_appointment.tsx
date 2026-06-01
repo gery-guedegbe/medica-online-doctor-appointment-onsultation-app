@@ -8,10 +8,12 @@ import AppButton from "@/components/ui/AppButton";
 import CalendarPicker from "@/components/ui/CalendarPicker";
 import TimeSlotPicker, { TimeSlot } from "@/components/ui/TimeSlotPicker";
 import { getDoctorSlots } from "@/services/availabilityService";
+import { useBookingStore } from "@/store/useBookingStore";
 
 const BookAppointmentScreen = () => {
   const router = useRouter();
-  const { doctorId } = useLocalSearchParams<{ doctorId: string }>();
+  const { setDoctor, setDateAndSlot } = useBookingStore();
+  const doctorId = useLocalSearchParams<{ doctorId: string }>().doctorId;
 
   const today = new Date();
 
@@ -40,16 +42,11 @@ const BookAppointmentScreen = () => {
 
   const handleNext = () => {
     if (!canProceed || !doctorId) return;
-    // Passe les informations de réservation à l'écran de confirmation
-    router.push({
-      pathname: "/(home)/appointment/select_package",
-      params: {
-        doctorId,
-        date: selectedDate.toISOString(),
-        slotStart: selectedSlot!.start,
-        slotEnd: selectedSlot!.end,
-      },
-    });
+
+    setDoctor(doctorId);
+    setDateAndSlot(selectedDate, selectedSlot!);
+
+    router.push("/(home)/appointment/select_package");
   };
 
   // ── Rendu ─────────────────────────────────────────────────────────────────

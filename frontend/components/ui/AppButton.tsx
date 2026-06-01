@@ -33,7 +33,7 @@ const AppButton = ({
         {
           width: s(380),
           height: vs(58),
-          borderRadius: 50,
+          borderRadius: s(50),
           paddingHorizontal: s(16),
           paddingVertical: vs(18),
           alignItems: "center",

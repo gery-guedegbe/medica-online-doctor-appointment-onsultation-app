@@ -9,11 +9,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppButton from "@/components/ui/AppButton";
 import AppDropDown, { DropDownOption } from "@/components/ui/AppDropDown";
 import { useAuthStore } from "@/stores/auth.store";
+import { useBookingStore } from "@/store/useBookingStore";
+import { useRouter } from "expo-router";
 
 // ── Options ───────────────────────────────────────────────────────────────────
 
@@ -30,18 +31,11 @@ const AGE_OPTIONS: DropDownOption[] = Array.from({ length: 83 }, (_, i) => {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 const PatientDetailsScreen = () => {
-  const { doctorId, date, slotStart, slotEnd, PackageId } =
-    useLocalSearchParams<{
-      doctorId: string;
-      date: string;
-      slotEnd: string;
-      slotStart: string;
-      PackageId: string;
-    }>();
-
   const router = useRouter();
 
   const { user } = useAuthStore();
+
+  const { card, setPatientInfo } = useBookingStore();
 
   const [problem, setProblem] = useState("");
   const [age, setAge] = useState<string | null>(null);
@@ -52,20 +46,15 @@ const PatientDetailsScreen = () => {
 
   const handleNext = () => {
     if (!canProceed) return;
-    router.push({
-      pathname: "/(home)/appointment/payments",
-      params: {
-        doctorId,
-        date,
-        slotStart,
-        slotEnd,
-        PackageId,
-        gender,
-        age,
-        patient_name: user?.full_name,
-        problem_description: problem.trim(),
-      },
+
+    setPatientInfo({
+      name: user?.full_name ?? "",
+      gender: gender as "male" | "female",
+      age: Number(age),
+      problemDescription: problem.trim(),
     });
+
+    router.push("/(home)/appointment/payments");
   };
 
   return (

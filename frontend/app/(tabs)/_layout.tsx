@@ -19,6 +19,7 @@ const TabsLayout = () => {
       />
 
       <Text
+        numberOfLines={1}
         style={{ fontSize: s(10), letterSpacing: s(0.2) }}
         className={`text-center font-urbanist-bold ${focused ? "text-primary-500" : "text-gray-500"}`}
       >
@@ -58,12 +59,12 @@ const TabsLayout = () => {
       />
 
       <Tabs.Screen
-        name="appointment"
+        name="appointments"
         options={{
-          title: "Appointment",
+          title: "Appointments",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              title="Appointment"
+              title="Appointments"
               icon={IMAGES.calendar_icon}
               focused={focused}
             />

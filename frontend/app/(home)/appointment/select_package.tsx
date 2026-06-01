@@ -5,9 +5,9 @@ import { IMAGES } from "@/constants/images";
 import AppButton from "@/components/ui/AppButton";
 import React, { useEffect, useState } from "react";
 import SelectItem from "@/components/ui/SelectItem";
+import { useBookingStore } from "@/store/useBookingStore";
 import { getDoctorPacages } from "@/services/packageService";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams } from "expo-router/build/hooks";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 
 export const PackageOption: DoctorPackage[] = [
@@ -39,12 +39,7 @@ const TypeData: {
 const SelectPackageScreen = () => {
   const router = useRouter();
 
-  const { doctorId, date, slotStart, slotEnd } = useLocalSearchParams<{
-    doctorId: string;
-    date: string;
-    slotStart: string;
-    slotEnd: string;
-  }>();
+  const { doctorId, setPackage } = useBookingStore();
 
   const [packages, setPackages] = useState<DoctorPackage[]>([]);
 
@@ -66,25 +61,14 @@ const SelectPackageScreen = () => {
       .finally(() => setLoadingPackages(false));
   }, [doctorId]);
 
-  const p = JSON.stringify(packages);
-
-  console.log(`Packages : ${p}`);
-
   const canProceed = selectedPackage !== null;
 
   const handleNext = () => {
     if (!canProceed) return;
 
-    router.push({
-      pathname: "/(home)/appointment/patient_details",
-      params: {
-        doctorId,
-        date,
-        slotStart,
-        slotEnd,
-        PackageId: selectedPackage.id,
-      },
-    });
+    setPackage(selectedPackage!);
+
+    router.push("/(home)/appointment/patient_details");
   };
 
   return (

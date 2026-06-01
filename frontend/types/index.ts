@@ -48,3 +48,30 @@ export interface Doctor {
   packages: DoctorPackage[];
   isFavorite?: boolean; // état UI uniquement, non présent dans l'API
 }
+
+// ── Booking Flow ──────────────────────────────────────────────────────────────
+
+export interface BookingSlot {
+  start: string; // "09:00"
+  end: string; // "09:30"
+}
+
+export interface BookingPatientInfo {
+  name: string;
+  gender: "male" | "female";
+  age: number;
+  problemDescription: string;
+}
+
+export type PaymentMethod =
+  | "paypal"
+  | "google_pay"
+  | "apple_pay"
+  | "credit_card";
+
+export interface BookingCardInfo {
+  cardNumber: string;
+  cardName: string;
+  expiryDate: string; // "MM/YY"
+  cvv: string;
+}

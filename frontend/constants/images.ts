@@ -60,6 +60,15 @@ import time_circle_icon from "@assets/icons/time_circle_icon.png";
 import call_icon from "@assets/icons/call_icon.png";
 import video_call_icon from "@assets/icons/video_call.png";
 import chat_icon from "@assets/icons/chat_icon.png";
+import scan_icon from "@assets/icons/scan_icon.png";
+import paypal_logo from "@assets/images/paypal_logo.png";
+import google_logo from "@assets/images/google_logo.png";
+import apple_logo from "@assets/images/apple_logo.png";
+import card_image from "@assets/images/card_image.png";
+import calendar_black_icon from "@assets/icons/calendar_black_icon.png";
+import master_card_logo from "@assets/images/master_card_logo.png";
+import congrate_image from "@assets/images/congrate_image.png";
+import failed_image from "@assets/images/failed_image.png";
 
 export const IMAGES = {
   app_logo,
@@ -124,4 +133,13 @@ export const IMAGES = {
   call_icon,
   video_call_icon,
   chat_icon,
+  scan_icon,
+  apple_logo,
+  paypal_logo,
+  google_logo,
+  card_image,
+  calendar_black_icon,
+  master_card_logo,
+  congrate_image,
+  failed_image,
 };
