@@ -49,16 +49,16 @@ export default function RootLayout() {
    * Gère: connexion, déconnexion, refresh de token, verification email.
    */
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === "SIGNED_OUT") {
-          // Session terminée → effacer l'état local
-          await signOut();
-        }
-        // SIGNED_IN, TOKEN_REFRESHED, USER_UPDATED sont gérés
-        // par les actions du store (signIn, checkSession)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_OUT") {
+        // Session terminée → effacer l'état local
+        await signOut();
       }
-    );
+      // SIGNED_IN, TOKEN_REFRESHED, USER_UPDATED sont gérés
+      // par les actions du store (signIn, checkSession)
+    });
 
     return () => subscription.unsubscribe();
   }, []);

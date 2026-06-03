@@ -35,6 +35,7 @@ const DoctorDetailsScreen = () => {
   const doctor = useDoctorStore((state) =>
     state.doctors.find((d) => d.id === id),
   );
+
   const { toggle, favoriteIds } = useFavoriteStore();
 
   const [rules, setRules] = useState<AvailabilityRule[]>([]);

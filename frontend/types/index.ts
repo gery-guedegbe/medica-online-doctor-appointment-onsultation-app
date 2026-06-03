@@ -75,3 +75,27 @@ export interface BookingCardInfo {
   expiryDate: string; // "MM/YY"
   cvv: string;
 }
+
+export type AppointmentStatus = "booked" | "completed" | "cancelled";
+
+export interface Appointment {
+  id: string;
+  start_time: string;
+  end_time: string;
+  status: AppointmentStatus;
+  patient_name: string;
+  patient_age: number;
+  problem_description: string;
+  cancellation_reason: string | null;
+  reschedule_count: number;
+  doctor_packages: {
+    type: DoctorPackage["type"];
+    price: number;
+    duration_minutes: number;
+  };
+  doctors: {
+    id: string;
+    specialty: string;
+    users: { full_name: string; avatar_url: string };
+  };
+}

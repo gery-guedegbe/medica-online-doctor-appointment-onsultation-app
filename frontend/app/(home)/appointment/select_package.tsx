@@ -16,7 +16,7 @@ export const PackageOption: DoctorPackage[] = [
   { id: "3", type: "messaging", duration_minutes: 45, price: 30 },
 ];
 
-const TypeData: {
+export const TypeData: {
   [key in DoctorPackage["type"]]: { label: string; desc: string; icon: any };
 } = {
   video: {

@@ -69,6 +69,7 @@ import calendar_black_icon from "@assets/icons/calendar_black_icon.png";
 import master_card_logo from "@assets/images/master_card_logo.png";
 import congrate_image from "@assets/images/congrate_image.png";
 import failed_image from "@assets/images/failed_image.png";
+import appointment_not_found_image from "@assets/images/appointment_not_found_image.png";
 
 export const IMAGES = {
   app_logo,
@@ -142,4 +143,5 @@ export const IMAGES = {
   master_card_logo,
   congrate_image,
   failed_image,
+  appointment_not_found_image,
 };
