@@ -38,7 +38,7 @@ const ForgotPasswordScreen = () => {
     formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: { email: user?.email },
+    defaultValues: { email: user?.email ?? "" },
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
@@ -118,7 +118,7 @@ const ForgotPasswordScreen = () => {
               name="email"
               render={({ field: { value, onChange } }) => (
                 <AppInput
-                  value={user?.email ?? ""}
+                  value={value}
                   onChangeText={onChange}
                   placeholder="Email"
                   keyboardType="email-address"

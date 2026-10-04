@@ -29,11 +29,21 @@ type AuthResult = {
  * et obtenir les données de profil complètes.
  */
 const syncWithBackend = async (accessToken: string): Promise<AuthResult> => {
-  const response = await api.post("/auth/login", { token: accessToken });
-  return {
-    user: response.data.data.user,
-    profile_complete: response.data.data.profile_complete,
-  };
+  console.info("[authService] Supabase Auth succeeded; syncing with backend");
+
+  try {
+    const response = await api.post("/auth/login", { token: accessToken });
+    return {
+      user: response.data.data.user,
+      profile_complete: response.data.data.profile_complete,
+    };
+  } catch (error) {
+    console.error(
+      "[authService] backend sync failed:",
+      error instanceof Error ? error.message : String(error),
+    );
+    throw error;
+  }
 };
 
 export const authService = {
@@ -53,7 +63,7 @@ export const authService = {
     const redirectUrl = Linking.createURL("/auth/verify");
 
     const { data, error } = await supabase.auth.signUp({
-      email,
+      email: email.trim(),
       password,
       options: { emailRedirectTo: redirectUrl },
     });
@@ -99,7 +109,7 @@ export const authService = {
    */
   signIn: async (email: string, password: string): Promise<AuthResult> => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     });
 
